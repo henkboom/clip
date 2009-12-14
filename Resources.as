@@ -16,5 +16,6 @@ package {
 
             return cache[image];
         }
+    }
 }
-}
+

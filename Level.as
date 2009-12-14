@@ -3,13 +3,35 @@ package {
         import flash.display.BitmapData;
         import flash.geom.Point;
 
-        public static function init(game:Game):void {
-            var width:int = 20;
-            var height:int = 15;
-            var cellSize:int = 16;
+        [Embed (source="block.png")]
+        private static var blockSprite:Class;
+
+        [Embed (source="level01.png")]
+        private static var level01:Class;
+
+        private static var emptyBlock:Object = {
+            solid: false,
+            sprite: null
+        };
+        private static var wallBlock:Object = {
+            solid: true,
+            sprite: blockSprite
+        };
+
+        private static var colorMappings:Object = {
+            0xffffff: emptyBlock,
+            0x000000: wallBlock,
+            0xff0000: "player"
+        };
+
+        public static function init(game:Game, levelNumber:int):void {
+            var cellSize:int = 8;
 
             //// INITIALIZE LEVEL
-            // TODO: load from image
+            var data:BitmapData = Resources.bitmap(level01);
+            var width:int = data.width;
+            var height:int = data.height;
+
             var level:Array = new Array();
             var i:int, j:int;
             for(i = 0; i < width; i++)
@@ -17,19 +39,28 @@ package {
                 level[i] = new Array();
                 for(j = 0; j < height; j++)
                 {
-                    level[i][j] = block_empty;
+                    var cell:Object =
+                        colorMappings[data.getPixel(i, height-j-1)];
+
+                    if(!cell) {
+                        throw new Error("unrecognized color at pixel "
+                                        + i + ", " + (height-j-1) + "of level "
+                                        + levelNumber);
+                    }
+
+                    if(cell == "player") {
+                        var pos:V2 = new V2(i * cellSize + cellSize/2,
+                                            j * cellSize + cellSize/2);
+                        game.addActor(new PlayerActor(game, pos));
+                        cell = emptyBlock;
+                    }
+
+                    if(cell.sprite) game.addActor(new SpriteActor(
+                        game, new V2(i*cellSize, j*cellSize), cell.sprite));
+
+                    level[i][j] = cell;
                 }
             }
-            level[0][0] = block_wall;
-            level[1][0] = block_wall;
-            level[2][0] = block_wall;
-            level[3][0] = block_wall;
-            level[4][0] = block_wall;
-            level[5][0] = block_wall;
-            level[6][0] = block_wall;
-            level[7][0] = block_wall;
-            level[1][2] = block_wall;
-            level[2][2] = block_wall;
 
             //// CHECK FOR COLLISION WITH LEVEL
             game.util.collidesWithLevel = function (rect:Rect):Boolean {
@@ -54,24 +85,21 @@ package {
             };
 
             //// DRAW THE LEVEL EVERY FRAME
-            game.addActor({
-                draw: function (buffer:BitmapData):void {
-                    var point:Point = new Point();
-                    for(i = 0; i < width; i++)
-                    for(j = 0; j < height; j++)
-                    if(level[i][j].sprite)
-                    {
-                        var sprite:BitmapData = level[i][j].sprite;
-                        point.x = i * cellSize;
-                        point.y = buffer.height - j * cellSize - sprite.height;
-                        buffer.copyPixels(sprite, sprite.rect, point);
-                    }
-                }
-            });
+            //game.addActor({
+            //    draw: function (buffer:BitmapData):void {
+            //        var point:Point = new Point();
+            //        for(i = 0; i < width; i++)
+            //        for(j = 0; j < height; j++)
+            //        if(level[i][j].sprite)
+            //        {
+            //            var sprite:BitmapData = level[i][j].sprite;
+            //            point.x = i * cellSize;
+            //            point.y = buffer.height - j * cellSize - sprite.height;
+            //            buffer.copyPixels(sprite, sprite.rect, point);
+            //        }
+            //    }
+            //});
         }
     }
 }
-
-var block_empty:Object = {solid: false, sprite: null};
-var block_wall:Object = {solid: true, sprite: Resources.bitmap()};
 

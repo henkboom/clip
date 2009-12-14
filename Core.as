@@ -16,12 +16,12 @@ package {
             frontBitmap = new Bitmap(new BitmapData(320, 240));
             frontBitmap.scaleX = 1.5;
             frontBitmap.scaleY = 1.5;
-            //frontBitmap.smoothing = true;
+            frontBitmap.smoothing = true;
 
             backBitmap = new Bitmap(new BitmapData(320, 240));
             backBitmap.scaleX = 1.5;
             backBitmap.scaleY = 1.5;
-            //backBitmap.smoothing = true;
+            backBitmap.smoothing = true;
 
             addEventListener(MouseEvent.CLICK, onClick);
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -52,7 +52,7 @@ package {
             var buffer:BitmapData = backBitmap.bitmapData;
             buffer.fillRect(
                 new Rectangle(0, 0, buffer.width, buffer.height),
-                0xff000000);
+                0xffffffff);
             if(scene) scene.draw(buffer);
 
             // FLIP

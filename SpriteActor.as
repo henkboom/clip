@@ -18,14 +18,10 @@ package {
             this.origin = origin || new V2(0, 0);
         }
     
-        public function update():void {
-            pos = V2.add(pos, new V2(Math.random()*2-1, Math.random()*2-1));
-        }
-    
         public function draw(buffer:BitmapData):void {
             point.x = pos.x - origin.x * width;
             point.y = buffer.height - pos.y - height + origin.y * height;
-            buffer.copyPixels(sprite, sprite.rect, point);
+            buffer.copyPixels(sprite, sprite.rect, point, null, null, true);
         }
     }
 }

@@ -1,6 +1,9 @@
 package {
     public class PlayerActor extends SpriteActor {
-        public var controller:PlayerInputActor;
+        [Embed (source="player.png")]
+        private var playerSprite:Class;
+
+        private var controller:PlayerInputActor;
 
         private var onGround:Boolean = false;
         private var jumpTimer:Number = 0;
@@ -9,57 +12,73 @@ package {
 
         public function PlayerActor(game:Game, pos:V2)
         {
-            super(game, pos, null, new V2(0.5, 0));
+            super(game, pos, playerSprite, new V2(0.5, 0));
 
             controller = new PlayerInputActor(game);
             game.addActor(controller);
         }
     
-        override public function update():void {
+        public function update():void {
             // decrement counters
-            yvel -= 1;
+            yvel -= 0.25;
+            if(yvel < -3) yvel = -3;
+
             if(jumpTimer > 0)
                 jumpTimer--;
 
+            // horizontal movement
+            if(controller.x < 0) {
+                if(xvel > -2) xvel-=0.25;
+                if(xvel > 0) xvel-=0.25;
+            } else if(controller.x > 0) {
+                if(xvel < 2) xvel += 0.25;
+                if(xvel < 0) xvel += 0.25;
+            } else if(xvel < 0) {
+                xvel += 0.25;
+                if(xvel < 0) xvel += 0.25
+            } else if(xvel > 0) {
+                xvel -= 0.25;
+                if(xvel > 0) xvel -= 0.25
+            }
+            if(xvel > 6) xvel = 6
+            if(xvel < -6) xvel = -6
+
+            while(!move(V2.add(pos, new V2(xvel, 0)))) {
+                if(xvel < 0)
+                    xvel += 0.25;
+                else
+                    xvel -= 0.25;
+            }
+
             // jump controls
             if(controller.jump) {
-                if(onGround)
-                    jumpTimer = 5;
+                if(onGround) {
+                    if(controller.x > 0) xvel += 1
+                    if(controller.x < 0) xvel -= 1
+                    jumpTimer = 12;
+                }
                 if(onGround || jumpTimer > 0) {
-                    yvel = 6;
+                    yvel = 3;
                     onGround = false;
                 }
             }
 
-            // horizontal movement
-            if(controller.x < 0) {
-                if(xvel > -8) xvel--;
-                if(xvel > 0) xvel--;
-            } else if(controller.x > 0) {
-                if(xvel < 8) xvel++;
-                if(xvel < 0) xvel++;
-            } else if(xvel < 0) {
-                xvel = xvel + 1;
-            } else if(xvel > 0) {
-                xvel = xvel - 1;
-            }
-
-            while(!move(V2.add(pos, new V2(xvel, 0)))) {
-                if(xvel < 0)
-                    xvel++;
-                else
-                    xvel--;
-            }
-
             // vertical movement
+            var hitCeil = false;
             while(!move(V2.add(pos, new V2(0, yvel)))) {
                 if(yvel < 0) {
-                    yvel++;
+                    yvel += 0.25;
                     onGround = true;
-                } else {
-                    yvel--;
+                } else if (yvel > 0){
+                    hitCeil = true;
+                    yvel -= 0.25;
                     jumpTimer = 0;
                 }
+            }
+            if(hitCeil) {
+                if(Math.abs(xvel) < 1) xvel = 0;
+                else if(xvel > 0) xvel-=1;
+                else if(xvel < 0) xvel+=1;
             }
             if(yvel < 0)
                 onGround = false;
