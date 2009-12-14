@@ -14,13 +14,13 @@ package {
 
         public function Core() {
             frontBitmap = new Bitmap(new BitmapData(320, 240));
-            frontBitmap.scaleX = 2;
-            frontBitmap.scaleY = 2;
+            frontBitmap.scaleX = 1.5;
+            frontBitmap.scaleY = 1.5;
             //frontBitmap.smoothing = true;
 
             backBitmap = new Bitmap(new BitmapData(320, 240));
-            backBitmap.scaleX = 2;
-            backBitmap.scaleY = 2;
+            backBitmap.scaleX = 1.5;
+            backBitmap.scaleY = 1.5;
             //backBitmap.smoothing = true;
 
             addEventListener(MouseEvent.CLICK, onClick);
