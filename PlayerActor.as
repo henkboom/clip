@@ -1,7 +1,14 @@
 package {
     public class PlayerActor extends SpriteActor {
         [Embed (source="player.png")]
-        private var playerSprite:Class;
+        private static var playerSprite:Class;
+        private static var playerAnimSpec:Object = {
+            idle: {row: 0, frames: 1, duration: 1},
+            walking: {row: 1, frames: 8, duration: 4}
+        }
+
+        private const width:int = 12;
+        private const height:int = 16;
 
         private var controller:PlayerInputActor;
 
@@ -12,14 +19,16 @@ package {
 
         public function PlayerActor(game:Game, pos:V2)
         {
-            super(game, pos, playerSprite, new V2(0.5, 0));
+            super(game, pos, playerSprite, new V2(0.5, 0), width, height,
+                  playerAnimSpec);
+            setAnimationState("walking");
 
             controller = new PlayerInputActor(game);
             game.addActor(controller);
         }
     
         public function update():void {
-            // decrement counters
+            // counters
             yvel -= 0.25;
             if(yvel < -3) yvel = -3;
 
@@ -28,10 +37,10 @@ package {
 
             // horizontal movement
             if(controller.x < 0) {
-                if(xvel > -2) xvel-=0.25;
+                if(xvel > -1) xvel-=0.25;
                 if(xvel > 0) xvel-=0.25;
             } else if(controller.x > 0) {
-                if(xvel < 2) xvel += 0.25;
+                if(xvel < 1) xvel += 0.25;
                 if(xvel < 0) xvel += 0.25;
             } else if(xvel < 0) {
                 xvel += 0.25;
@@ -49,6 +58,7 @@ package {
                 else
                     xvel -= 0.25;
             }
+            advanceAnimation(Math.abs(xvel));
 
             // jump controls
             if(controller.jump) {
@@ -61,10 +71,12 @@ package {
                     yvel = 3;
                     onGround = false;
                 }
+            } else {
+                jumpTimer = 0;
             }
 
             // vertical movement
-            var hitCeil = false;
+            var hitCeil:Boolean = false;
             while(!move(V2.add(pos, new V2(0, yvel)))) {
                 if(yvel < 0) {
                     yvel += 0.25;
