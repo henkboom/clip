@@ -8,12 +8,14 @@ package {
         private static var rect:Rectangle = new Rectangle();
 
         private var sprite:BitmapData;
+        private var rSprite:BitmapData;
         private var origin:V2;
         private var animSpec:Object;
         private var state:String;
         private var time:Number;
         private var width:int;
-        private var height:int;
+        private var height:int; 
+        private var facing:int;
 
         public function SpriteActor(game:Game, pos:V2, sprite:Class = null,
                                     origin:V2 = null, width:int = 0,
@@ -22,6 +24,7 @@ package {
 
             this.pos = pos;
             this.sprite = Resources.bitmap(sprite);
+            this.rSprite = Resources.reverseBitmap(sprite);
 
             if(width == 0) width = this.sprite.width;
             this.width = width;
@@ -32,6 +35,7 @@ package {
 
             this.origin = origin || new V2(0, 0);
             this.animSpec = animSpec;
+            this.facing = 1;
 
             setAnimationState("idle");
         }
@@ -41,21 +45,36 @@ package {
         }
 
         protected function setAnimationState(state:String):void {
-            this.state = state;
-            time = 0;
+            if(this.state != state) {
+                this.state = state;
+                time = 0;
+            }
         }
-    
+
+        protected function setFacing(facing:int):void {
+            this.facing = facing;
+        }
+
         public function draw(buffer:BitmapData):void {
             var row:int = animSpec[state].row;
             var col:int = Math.floor(time/animSpec[state].duration)
                           % (animSpec[state].frames);
-            rect.x = col * width;
-            rect.y = row * height;
+
+            var chosenSprite:BitmapData;
+            if(facing > 0) {
+                chosenSprite = sprite;
+                rect.x = col * width;
+                rect.y = row * height;
+            } else {
+                chosenSprite = rSprite;
+                rect.x = rSprite.width - col * width - width;
+                rect.y = row * height;
+            }
             rect.width = width;
             rect.height = height;
             point.x = pos.x - origin.x * width;
             point.y = buffer.height - pos.y - height + origin.y * height;
-            buffer.copyPixels(sprite, rect, point, null, null, true);
+            buffer.copyPixels(chosenSprite, rect, point, null, null, true);
         }
     }
 }

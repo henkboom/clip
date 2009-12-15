@@ -3,8 +3,10 @@ package {
         [Embed (source="player.png")]
         private static var playerSprite:Class;
         private static var playerAnimSpec:Object = {
-            idle: {row: 0, frames: 1, duration: 1},
-            walking: {row: 1, frames: 8, duration: 4}
+            idle: {row: 0, frames: 8, duration: 15},
+            walking: {row: 1, frames: 8, duration: 4},
+            jumping: {row: 2, frames: 1, duration: 1},
+            falling: {row: 3, frames: 1, duration: 1}
         }
 
         private const width:int = 12;
@@ -58,7 +60,6 @@ package {
                 else
                     xvel -= 0.25;
             }
-            advanceAnimation(Math.abs(xvel));
 
             // jump controls
             if(controller.jump) {
@@ -94,6 +95,27 @@ package {
             }
             if(yvel < 0)
                 onGround = false;
+
+            if(controller.x > 0) setFacing(1);
+            else if(controller.x < 0) setFacing(-1);
+
+            if(onGround) {
+                if(xvel == 0) {
+                    setAnimationState("idle");
+                    advanceAnimation(1);
+                } else {
+                    setAnimationState("walking");
+                    advanceAnimation(Math.abs(xvel));
+                }
+            } else {
+                if(yvel >= 0) {
+                    setAnimationState("jumping");
+                    advanceAnimation(1);
+                } else {
+                    setAnimationState("falling");
+                    advanceAnimation(1);
+                }
+            }
         }
 
         private function move(newPos:V2):Boolean
