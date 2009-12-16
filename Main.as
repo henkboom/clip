@@ -8,10 +8,7 @@ package {
             var core:Core = new Core();
             addChild(core);
 
-            var game:Game = new Game(core);
-            core.setScene(game);
-
-            Level.init(game, 1);
+            core.setScene(new GameManager(core));
         }
     }
 }

@@ -42,6 +42,15 @@ package {
 
         protected function advanceAnimation(delta:Number):void {
             time += delta;
+            if(animSpec[state].after) {
+                var totalDuration:Number =
+                    animSpec[state].duration * animSpec[state].frames;
+                if(time >= totalDuration) {
+                    var leftover:Number = time - totalDuration;
+                    setAnimationState(animSpec[state].after);
+                    advanceAnimation(leftover);
+                }
+            }
         }
 
         protected function setAnimationState(state:String):void {
@@ -72,7 +81,7 @@ package {
             }
             rect.width = width;
             rect.height = height;
-            point.x = pos.x - origin.x * width;
+            point.x = pos.x - origin.x * width - game.util.xScroll;
             point.y = buffer.height - pos.y - height + origin.y * height;
             buffer.copyPixels(chosenSprite, rect, point, null, null, true);
         }

@@ -3,25 +3,23 @@ package {
         import flash.display.BitmapData;
         import flash.geom.Point;
 
-        [Embed (source="block.png")]
-        private static var blockSprite:Class;
-
         [Embed (source="level01.png")]
         private static var level01:Class;
 
         private static var emptyBlock:Object = {
             solid: false,
-            sprite: null
+            actor: null
         };
         private static var wallBlock:Object = {
             solid: true,
-            sprite: blockSprite
+            actor: WallActor
         };
 
         private static var colorMappings:Object = {
             0xffffff: emptyBlock,
             0x000000: wallBlock,
-            0xff0000: "player"
+            0xff0000: "player",
+            0x0000ff: "victory"
         };
 
         public static function init(game:Game, levelNumber:int):void {
@@ -31,6 +29,9 @@ package {
             var data:BitmapData = Resources.bitmap(level01);
             var width:int = data.width;
             var height:int = data.height;
+
+            game.util.levelWidth = width * cellSize;
+            game.util.levelHeight = height * cellSize;
 
             var level:Array = new Array();
             var i:int, j:int;
@@ -55,8 +56,8 @@ package {
                         cell = emptyBlock;
                     }
 
-                    if(cell.sprite) game.addActor(new SpriteActor(
-                        game, new V2(i*cellSize, j*cellSize), cell.sprite));
+                    if(cell.actor) game.addActor(
+                        new cell.actor(game, new V2(i*cellSize, j*cellSize)));
 
                     level[i][j] = cell;
                 }
@@ -83,6 +84,9 @@ package {
                 }
                 return false;
             };
+
+            game.util.checkVictory = function (rect:Rect):void {
+            }
 
             //// DRAW THE LEVEL EVERY FRAME
             //game.addActor({

@@ -9,7 +9,7 @@ package {
         private var _util:Object = {};
         public function get util():Object { return _util; }
     
-        private var updateMethods:Array = ['preupdate', 'update'];
+        private var updateMethods:Array = ['preupdate', 'update', 'postupdate'];
         private var drawMethods:Array = ['draw'];
     
         private var actorsByMethod:Object = {};
