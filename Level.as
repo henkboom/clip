@@ -56,12 +56,15 @@ package {
                         cell = emptyBlock;
                     }
 
-                    if(cell.actor) game.addActor(
-                        new cell.actor(game, new V2(i*cellSize, j*cellSize)));
-
                     level[i][j] = cell;
                 }
             }
+
+            for(i = 0; i < width; i++)
+                for(j = 0; j < height; j++)
+                    if(level[i][j].actor) game.addActor(
+                        new cell.actor(game, level, i, j));
+
 
             //// CHECK FOR COLLISION WITH LEVEL
             game.util.collidesWithLevel = function (rect:Rect):Boolean {
