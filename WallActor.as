@@ -29,10 +29,10 @@ package {
             super(game, new V2(x*8, y*8), blockSprite,
                   new V2(0, 0), 8, 8, blockAnimSpec);
             var index:int = 0;
-            if(level[x+1] && level[x+1][y].actor == WallActor) index += 1;
-            if(level[x][y+1] && level[x][y+1].actor == WallActor) index += 2;
-            if(level[x-1] && level[x-1][y].actor == WallActor) index += 4;
-            if(level[x][y-1] && level[x][y-1].actor == WallActor) index += 8;
+            if(!level[x+1] || level[x+1][y].actor == WallActor) index += 1;
+            if(!level[x][y+1] || level[x][y+1].actor == WallActor) index += 2;
+            if(!level[x-1] || level[x-1][y].actor == WallActor) index += 4;
+            if(!level[x][y-1] || level[x][y-1].actor == WallActor) index += 8;
 
             setAnimationState(String(index));
 
