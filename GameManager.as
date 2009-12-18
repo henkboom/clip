@@ -2,6 +2,7 @@ package {
     import flash.display.BitmapData;
     import flash.events.Event;
     import flash.events.KeyboardEvent;
+    import flash.events.MouseEvent;
     import flash.geom.Point;
 
     public class GameManager implements IScene {
@@ -13,6 +14,10 @@ package {
         private static var buttonSprite:Class;
         private static var buttonPoint:Point = new Point(0, 240-12);
         private static var buttonMax:int = 320-12;
+
+        [Embed (source="drag.png")]
+        private static var dragSprite:Class;
+        private static var dragPoint:Point = new Point(320-62, 240-12-28);
 
         private var core:Core;
         private var game:Game;
@@ -28,6 +33,9 @@ package {
 
         private var level:int = 1;
 
+        private var mouseHeld:Boolean = false;
+        private var mouseTime:int = 0;
+
         private var controls:Array = new Array();
 
         public function GameManager(core:Core)
@@ -36,6 +44,9 @@ package {
             initGame();
             core.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
             core.addEventListener(KeyboardEvent.KEY_UP, onKey);
+            core.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
+            core.addEventListener(MouseEvent.MOUSE_UP, onMouse);
+            core.addEventListener(MouseEvent.MOUSE_MOVE, onMouse);
         }
 
         public function initGame():void {
@@ -49,13 +60,18 @@ package {
         }
 
         public function update():void {
-            if(time < maxTime) {
-                controls[time] = {left: left, right: right, jump: jump};
-                doUpdate();
+            if(mouseHeld) {
+                if(time != mouseTime) seekTo(mouseTime);
             }
-            if(game.util.victory) {
-                level++;
-                initGame();
+            else {
+                if(time < maxTime) {
+                    controls[time] = {left: left, right: right, jump: jump};
+                    doUpdate();
+                }
+                if(game.util.victory) {
+                    level++;
+                    initGame();
+                }
             }
         }
 
@@ -70,6 +86,9 @@ package {
                 }
                 doUpdate();
             }
+        }
+
+        public function clearFuture():void {
             for(var i:int = time; i < maxTime; i++) {
                 delete controls[i];
             }
@@ -96,6 +115,28 @@ package {
             buffer.copyPixels(button, button.rect, buttonPoint, null, null,
                               true);
 
+            if(time == maxTime) {
+                var drag:BitmapData = Resources.bitmap(dragSprite);
+                buffer.copyPixels(drag, drag.rect, dragPoint, null, null,
+                                  true);
+            }
+        }
+
+        private function onMouse(event:MouseEvent):void {
+            if(event.type == MouseEvent.MOUSE_DOWN && event.localY > 360-18) {
+                mouseHeld = true;
+                mouseTime = int((event.localX - 9.0)/(480-18) * maxTime);
+            }
+            else if(event.type == MouseEvent.MOUSE_UP) {
+                mouseHeld = false;
+                clearFuture();
+            }
+            else if(event.type == MouseEvent.MOUSE_MOVE) {
+                mouseTime = int((event.localX - 9.0)/(480-18) * maxTime);
+            }
+
+            if(mouseTime < 1) mouseTime = 1;
+            if(mouseTime > maxTime) mouseTime = maxTime;
         }
         
         private function onKey(event:KeyboardEvent):void {

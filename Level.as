@@ -18,6 +18,9 @@ package {
         [Embed (source="l_long_jump.png")]
         private static var longJumpLevel:Class;
 
+        [Embed (source="l_trees.png")]
+        private static var treesLevel:Class;
+
         [Embed (source="l_end.png")]
         private static var endLevel:Class;
 
@@ -27,6 +30,7 @@ package {
             deepJumpLevel,
             climbLevel,
             longJumpLevel,
+            treesLevel,
             endLevel
         ]
 
@@ -78,7 +82,7 @@ package {
 
                     if(cell == "player") {
                         var playerPos:V2 = new V2(i * cellSize + cellSize/2,
-                                                  j * cellSize + cellSize/2);
+                                                  j * cellSize);
                         game.addActor(new PlayerActor(game, playerPos));
                         cell = emptyBlock;
                     } else if (cell == "goal") {
