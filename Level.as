@@ -5,6 +5,22 @@ package {
 
         [Embed (source="level01.png")]
         private static var level01:Class;
+        [Embed (source="level02.png")]
+        private static var level02:Class;
+        [Embed (source="level03.png")]
+        private static var level03:Class;
+        [Embed (source="level04.png")]
+        private static var level04:Class;
+        [Embed (source="level05.png")]
+        private static var level05:Class;
+
+        private static var levels:Array = [
+            level01,
+            level02,
+            level03,
+            level04,
+            level05
+        ]
 
         private static var emptyBlock:Object = {
             solid: false,
@@ -19,19 +35,22 @@ package {
             0xffffff: emptyBlock,
             0x000000: wallBlock,
             0xff0000: "player",
-            0x0000ff: "victory"
+            0x0000ff: "goal"
         };
 
         public static function init(game:Game, levelNumber:int):void {
             var cellSize:int = 8;
 
             //// INITIALIZE LEVEL
-            var data:BitmapData = Resources.bitmap(level01);
+            var data:BitmapData = Resources.bitmap(levels[levelNumber-1]);
             var width:int = data.width;
             var height:int = data.height;
 
+            var goalPos:V2;
+
             game.util.levelWidth = width * cellSize;
             game.util.levelHeight = height * cellSize;
+            game.util.victory = false;
 
             var level:Array = new Array();
             var i:int, j:int;
@@ -45,16 +64,22 @@ package {
 
                     if(!cell) {
                         throw new Error("unrecognized color at pixel "
-                                        + i + ", " + (height-j-1) + "of level "
+                                        + i + ", " + (height-j-1) + " of level "
                                         + levelNumber);
                     }
 
                     if(cell == "player") {
-                        var pos:V2 = new V2(i * cellSize + cellSize/2,
-                                            j * cellSize + cellSize/2);
-                        game.addActor(new PlayerActor(game, pos));
+                        var playerPos:V2 = new V2(i * cellSize + cellSize/2,
+                                                  j * cellSize + cellSize/2);
+                        game.addActor(new PlayerActor(game, playerPos));
+                        cell = emptyBlock;
+                    } else if (cell == "goal") {
+                        goalPos = new V2(i * cellSize,
+                                         j * cellSize);
+                        game.addActor(new GoalActor(game, goalPos));
                         cell = emptyBlock;
                     }
+
 
                     level[i][j] = cell;
                 }
@@ -89,6 +114,12 @@ package {
             };
 
             game.util.checkVictory = function (rect:Rect):void {
+                var overlapX:Boolean = (rect.x < goalPos.x + 16) &&
+                                       (rect.x + rect.w > goalPos.x );
+                var overlapY:Boolean = (rect.y < goalPos.y + 16) &&
+                                       (rect.y + rect.h > goalPos.y );
+                if(overlapX && overlapY)
+                    game.util.victory = true;
             }
 
             //// DRAW THE LEVEL EVERY FRAME

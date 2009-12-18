@@ -26,6 +26,8 @@ package {
         private var time:int = 0;
         private var maxTime:int = 1800;
 
+        private var level:int = 1;
+
         private var controls:Array = new Array();
 
         public function GameManager(core:Core)
@@ -37,12 +39,13 @@ package {
         }
 
         public function initGame():void {
+            time = 0;
             game = new Game(core);
             game.util.controlDirection = 0;
             game.util.controlJump = false;
             game.util.controlJumpHeld = false;
             lastJump = false;
-            Level.init(game, 1);
+            Level.init(game, level);
         }
 
         public function update():void {
@@ -50,12 +53,15 @@ package {
                 controls[time] = {left: left, right: right, jump: jump};
                 doUpdate();
             }
+            if(game.util.victory) {
+                level++;
+                initGame();
+            }
         }
 
         public function seekTo(targetTime:int):void {
             if(targetTime < time) {
                 initGame();
-                time = 0;
             }
             while(time < targetTime) {
                 if(!controls[time]) {

@@ -11,7 +11,5 @@ package {
         public static function add(a:V2, b:V2):V2 {
             return new V2(a.x + b.x, a.y + b.y);
         }
-    
-        // TODO...
     }
 }
