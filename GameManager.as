@@ -24,7 +24,7 @@ package {
         private var lastJump:Boolean = false;
 
         private var time:int = 0;
-        private var maxTime:int = 1800;
+        private var maxTime:int = 1200;
 
         private var level:int = 1;
 

@@ -30,9 +30,10 @@ package {
     
             for each (m in updateMethods) {
                 actors = actorsByMethod[m];
-                for each (a in actors)
+                for each (a in actors){
                     if(!deadSet[a])
                         a[m]();
+                }
             }
     
             // wipe dead actors

@@ -3,23 +3,31 @@ package {
         import flash.display.BitmapData;
         import flash.geom.Point;
 
-        [Embed (source="level01.png")]
-        private static var level01:Class;
-        [Embed (source="level02.png")]
-        private static var level02:Class;
-        [Embed (source="level03.png")]
-        private static var level03:Class;
-        [Embed (source="level04.png")]
-        private static var level04:Class;
-        [Embed (source="level05.png")]
-        private static var level05:Class;
+        [Embed (source="l_walk.png")]
+        private static var walkLevel:Class;
+
+        [Embed (source="l_jump.png")]
+        private static var jumpLevel:Class;
+
+        [Embed (source="l_deep_jump.png")]
+        private static var deepJumpLevel:Class;
+
+        [Embed (source="l_climb.png")]
+        private static var climbLevel:Class;
+
+        [Embed (source="l_long_jump.png")]
+        private static var longJumpLevel:Class;
+
+        [Embed (source="l_end.png")]
+        private static var endLevel:Class;
 
         private static var levels:Array = [
-            level01,
-            level02,
-            level03,
-            level04,
-            level05
+            walkLevel,
+            jumpLevel,
+            deepJumpLevel,
+            climbLevel,
+            longJumpLevel,
+            endLevel
         ]
 
         private static var emptyBlock:Object = {
@@ -80,7 +88,6 @@ package {
                         cell = emptyBlock;
                     }
 
-
                     level[i][j] = cell;
                 }
             }
@@ -114,12 +121,14 @@ package {
             };
 
             game.util.checkVictory = function (rect:Rect):void {
-                var overlapX:Boolean = (rect.x < goalPos.x + 16) &&
-                                       (rect.x + rect.w > goalPos.x );
-                var overlapY:Boolean = (rect.y < goalPos.y + 16) &&
-                                       (rect.y + rect.h > goalPos.y );
-                if(overlapX && overlapY)
-                    game.util.victory = true;
+                if(goalPos) {
+                    var overlapX:Boolean = (rect.x < goalPos.x + 16) &&
+                                           (rect.x + rect.w > goalPos.x );
+                    var overlapY:Boolean = (rect.y < goalPos.y + 16) &&
+                                           (rect.y + rect.h > goalPos.y );
+                    if(overlapX && overlapY)
+                        game.util.victory = true;
+                }
             }
 
             //// DRAW THE LEVEL EVERY FRAME

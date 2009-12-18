@@ -24,6 +24,8 @@ package {
         }
     
         public function update():void {
+            if(!move(pos)) throw new Error("player in wall");
+
             var cDir:Number = game.util.controlDirection;
             var cJump:Boolean = game.util.controlJump;
             var cJumpHeld:Boolean = game.util.controlJumpHeld;
