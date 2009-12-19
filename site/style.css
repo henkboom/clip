@@ -1,0 +1,70 @@
+* {margin: 0; border: 0; padding: 0;}
+
+html
+{
+    overflow-y: scroll;
+}
+
+body
+{
+    background-color: white;
+}
+
+h1, h2, h3 {
+    color: #3e45bb;
+}
+
+h1 {
+    font-size: 200%;
+    line-height: 200%;
+    margin-top: 0.5em;
+}
+
+a
+{
+    text-decoration: none;
+    color: #3e45bb;
+}
+
+p
+{
+    margin-bottom: 0.75em;
+}
+
+#game
+{
+    /*background: url("bg.png");*/
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 528px;
+    height: 408px;
+    position: relative;
+    margin: 2em auto 0 auto;
+}
+
+#flash
+{
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    background-color: white;
+    width: 480px;
+    height: 360px;
+    margin: 0 auto 0 auto;
+}
+
+#infolinkbox
+{
+    text-align: center;
+    padding-top: 1.5em;
+}
+
+#info
+{
+    width: 480px;
+    margin: 0 auto 0 auto;
+}
+
+#infotext {
+    display: none;
+}

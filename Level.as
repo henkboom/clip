@@ -21,6 +21,9 @@ package {
         [Embed (source="l_trees.png")]
         private static var treesLevel:Class;
 
+        [Embed (source="l_big.png")]
+        private static var bigLevel:Class;
+
         [Embed (source="l_end.png")]
         private static var endLevel:Class;
 
@@ -31,6 +34,7 @@ package {
             climbLevel,
             longJumpLevel,
             treesLevel,
+            bigLevel,
             endLevel
         ]
 

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>clip.henk.ca</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#infolink").click(function () {
+                $("#infolinkbox").fadeOut("slow", function () {
+                    $("#infotext").fadeIn("slow");
+                });
+                return false;
+            });
+        });
+    </script>
+  </head>
+  <body>
+      <div id="game"><div id="flash">
+      <object width="480" height="360"><embed src="game.swf" type="application/x-shockwave-flash" width="480" height="360"></embed></object> 
+      </div></div>
+      <div id="info">
+        <div id="infolinkbox">
+          <a id="infolink" href="">info</a>
+        </div>
+        <div id="infotext">
+
+<h1>clip: cart 498f prototype project</h1>
+<p>a 10-second "video" game prototype by <a href="http://henk.ca/">Henk Boom
+</a></p>
+<h2>the game</h2>
+<p>The controls are presented in-game, but just in case you missed them, arrow
+keys left and right to move, up to jump. You can drag the timeline to turn back
+(or forward) time. One tip for getting across large gaps: if you repeatedly
+jump while moving in one direction without stopping, each jump goes farther
+than the last.</p>
+<h2>concept</h2>
+<p>The concept was to make a game that played like a youtube video. The video
+lasts 10 seconds, after which it stops. However, you can rewind or fast forward
+the video by moving the timeline. Currently this is useful for undoing
+mistakes, but many other things are possible.</p>
+<h2>future directions</h2>
+<p>Other than just extending the game, it would be interesting to look into
+what other elements of streaming video could be taken advantage of. For
+example, it would be interesting to add buffering as a gameplay mechanic.
+Instead of having access to the whole 10 seconds of the clip, only the first 4
+would buffer, and you have to collect data packets to extend it, racing to get
+them before you run out of time. The exit and some of the data packets would be
+too far away to reach in four seconds, so you'd have to plan in what order to
+pick them up to maximize your chances of reaching the exit.</p>
+<p>The speed relationship between jumping and walking makes for fun movement, and it would be fun to take advantage of that with larger environments.</p>
+<h2>what happened?</h2>
+<p>The other students in CART 498f might be surprised at this project, since
+it's so different from the earlier concepts I showed in class. I had an
+ambitious plan (posted
+<a href="http://stuff.henk.ca/cart498f/schedule.xhtml">here</a>), which I'd put
+a lot of time into, and was pretty excited about. Over time, as I kept adding
+features, I started to feel like the game wasn't focused enough, it didn't
+have a SOUL of its own. I started to feel like even if I finished everything
+that I wanted to put in, I would end up with a piece of software which wasn't
+interesting, just full of features.</p>
+<p>In order to jump-start my motivation again, I decided to go back to the
+beginning, and come up with a small, focused concept, maybe similar or maybe
+different. I eventually came up with what's above, but the limited time left I
+was restricted to making a prototype, not a fully developed game. Still, it's
+a successful prototype in that it prompted new ideas.</p>
+        </div>
+        <br/>
+        <br/>
+      </div>
+  </body>
+</html>
