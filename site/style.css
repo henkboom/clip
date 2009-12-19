@@ -20,13 +20,17 @@ h1 {
     margin-top: 0.5em;
 }
 
+ul {
+    padding-left: 3em;
+}
+
 a
 {
     text-decoration: none;
     color: #3e45bb;
 }
 
-p
+p, ul
 {
     margin-bottom: 0.75em;
 }
